@@ -26,7 +26,6 @@ const productsRoutes = require('./modules/products/products.routes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const API_VERSION = process.env.API_VERSION || 'v1';
-<<<<<<< Updated upstream
 const PUBLIC_API_URL = (process.env.PUBLIC_API_URL || '').replace(/\/+$/, '');
 const publicApiOrigin = PUBLIC_API_URL ? new URL(PUBLIC_API_URL).origin : null;
 const allowedOrigins = (process.env.CORS_ORIGIN || '*')
@@ -41,32 +40,8 @@ function getRequestOrigin(req) {
 function getApiBaseUrl(req) {
   return PUBLIC_API_URL || getRequestOrigin(req);
 }
-=======
-const PUBLIC_APP_URL = (process.env.PUBLIC_APP_URL || process.env.APP_URL || process.env.CORS_ORIGIN || 'http://localhost:3000').replace(/\/+$/, '');
-const ALLOWED_CORS_ORIGINS = (process.env.CORS_ORIGIN || '')
-  .split(',')
-  .map(origin => origin.trim())
-  .filter(Boolean)
-  .concat(PUBLIC_APP_URL)
-  .filter(Boolean)
-  .filter((value, index, array) => array.indexOf(value) === index);
->>>>>>> Stashed changes
 
 // ===== SECURITY MIDDLEWARE =====
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-    if (ALLOWED_CORS_ORIGINS.includes(origin)) return callback(null, true);
-    if (origin.includes('localhost') || origin.includes('127.0.0.1') || origin.endsWith('.onrender.com')) {
-      return callback(null, true);
-    }
-    return callback(new Error('CORS origin not allowed'));
-  },
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-}));
-
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -87,7 +62,6 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false,
 }));
 
-<<<<<<< Updated upstream
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
@@ -100,8 +74,6 @@ app.use(cors({
   credentials: true,
 }));
 
-=======
->>>>>>> Stashed changes
 app.use(compression());
 
 // ===== BODY PARSING =====
@@ -146,11 +118,7 @@ app.get('/api/config', (req, res) => {
   res.json({
     supabaseUrl: process.env.SUPABASE_URL,
     supabaseAnonKey: process.env.SUPABASE_ANON_KEY,
-<<<<<<< Updated upstream
     apiBaseUrl: getApiBaseUrl(req)
-=======
-    appUrl: PUBLIC_APP_URL,
->>>>>>> Stashed changes
   });
 });
 
