@@ -3,6 +3,8 @@ const { query } = require('../../config/database');
 const logger = require('../../shared/utils/logger');
 const EmailService = require('../../shared/utils/email');
 
+const normalizeAccountType = (type) => type === 'seller' || type === 'installer' ? 'installer' : 'homeowner';
+
 class AuthController {
   /**
    * POST /auth/register
@@ -10,7 +12,8 @@ class AuthController {
    */
   static async register(req, res, next) {
     try {
-      const { email, password, name, type = 'homeowner' } = req.body;
+      const { email, password, name } = req.body;
+      const type = normalizeAccountType(req.body.type);
       if (!email || !password || !name) {
         return res.status(400).json({
           success: false,
@@ -113,7 +116,7 @@ class AuthController {
             decodedToken.id,
             decodedToken.email,
             decodedToken.user_metadata?.name || decodedToken.email.split('@')[0],
-            'homeowner',
+            normalizeAccountType(decodedToken.user_metadata?.type),
             'free',
             'active',
             Boolean(decodedToken.email_confirmed_at),

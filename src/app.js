@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
 const logger = require('./shared/utils/logger');
@@ -25,6 +26,20 @@ const productsRoutes = require('./modules/products/products.routes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const API_VERSION = process.env.API_VERSION || 'v1';
+const PUBLIC_API_URL = (process.env.PUBLIC_API_URL || '').replace(/\/+$/, '');
+const publicApiOrigin = PUBLIC_API_URL ? new URL(PUBLIC_API_URL).origin : null;
+const allowedOrigins = (process.env.CORS_ORIGIN || '*')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+function getRequestOrigin(req) {
+  return `${req.protocol}://${req.get('host')}`;
+}
+
+function getApiBaseUrl(req) {
+  return PUBLIC_API_URL || getRequestOrigin(req);
+}
 
 // ===== SECURITY MIDDLEWARE =====
 app.use(helmet({
@@ -41,14 +56,19 @@ app.use(helmet({
       imgSrc: ["'self'", "data:", "https:"],
       scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
       scriptSrcAttr: ["'unsafe-inline'"],
-      connectSrc: ["'self'", "https://*.supabase.co"],
+      connectSrc: ["'self'", "https://*.supabase.co", ...(publicApiOrigin ? [publicApiOrigin] : [])],
     },
   },
   crossOriginEmbedderPolicy: false,
 }));
 
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error(`Origin ${origin} is not allowed by CORS`));
+  },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
@@ -97,14 +117,20 @@ app.get('/health', (req, res) => {
 app.get('/api/config', (req, res) => {
   res.json({
     supabaseUrl: process.env.SUPABASE_URL,
-    supabaseAnonKey: process.env.SUPABASE_ANON_KEY
+    supabaseAnonKey: process.env.SUPABASE_ANON_KEY,
+    apiBaseUrl: getApiBaseUrl(req)
   });
 });
 
 // Serve the single-page frontend from the project root.
-app.use(express.static(path.join(__dirname, '..')));
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'index.html'));
+app.use(express.static(path.join(__dirname, '..'), { index: false }));
+app.get('/', (req, res, next) => {
+  const indexPath = path.join(__dirname, '..', 'index.html');
+  fs.readFile(indexPath, 'utf8', (error, html) => {
+    if (error) return next(error);
+    const apiBaseUrl = getApiBaseUrl(req).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+    res.type('html').send(html.replace('__SOLYNK_API_URL__', apiBaseUrl));
+  });
 });
 
 // ===== API ROUTES =====
@@ -148,7 +174,7 @@ app.use(errorHandler);
 
 if (require.main === module) {
   // ===== START SERVER =====
-  const server = app.listen(PORT, () => {
+  const server = app.listen(PORT, process.env.HOST || '0.0.0.0', () => {
     logger.info(`🚀 SOLYNK API running on port ${PORT}`);
     logger.info(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
     logger.info(`🔌 API Base: /api/${API_VERSION}`);

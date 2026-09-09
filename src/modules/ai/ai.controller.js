@@ -173,7 +173,7 @@ class AIController {
       }
 
       // Fallback: rule-based responses
-      const fallbackResponse = this.getFallbackResponse(message, projectContext);
+      const fallbackResponse = AIController.getFallbackResponse(message, projectContext);
       res.json({
         success: true,
         data: {

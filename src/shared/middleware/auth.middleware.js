@@ -2,6 +2,8 @@ const { supabase } = require('../../config/supabase');
 const { query } = require('../../config/database');
 const logger = require('../utils/logger');
 
+const normalizeAccountType = (type) => type === 'seller' || type === 'installer' ? 'installer' : 'homeowner';
+
 /**
  * Verify a Supabase access token and attach the local profile to the request.
  */
@@ -39,8 +41,8 @@ const authenticate = async (req, res, next) => {
     if (!user) {
       // Auto-create user if not in DB yet
       const newUser = await query(
-        `INSERT INTO users (supabase_uid, email, name, avatar_url, email_verified)
-         VALUES ($1, $2, $3, $4, $5)
+        `INSERT INTO users (supabase_uid, email, name, avatar_url, email_verified, type)
+         VALUES ($1, $2, $3, $4, $5, $6)
          RETURNING *`,
         [
           authUser.id,
@@ -48,6 +50,7 @@ const authenticate = async (req, res, next) => {
           authUser.user_metadata?.name || authUser.email.split('@')[0],
           authUser.user_metadata?.avatar_url || null,
           Boolean(authUser.email_confirmed_at),
+          normalizeAccountType(authUser.user_metadata?.type),
         ]
       );
       user = newUser.rows[0];
