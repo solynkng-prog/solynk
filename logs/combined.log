@@ -1971,3 +1971,15 @@
 {"ip":"::1","level":"info","message":"GET /156444-812591952.mp4","requestId":"1788118592749-m0ax7zb21","service":"solynk-api","timestamp":"2026-08-30 20:36:32","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.135.0 Chrome/148.0.7778.280 Electron/42.8.1 Safari/537.36"}
 {"ip":"::1","level":"info","message":"GET /156444-812591952.mp4","requestId":"1788118592910-i0vj7n70n","service":"solynk-api","timestamp":"2026-08-30 20:36:32","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.135.0 Chrome/148.0.7778.280 Electron/42.8.1 Safari/537.36"}
 {"ip":"::1","level":"info","message":"GET /156444-812591952.mp4","requestId":"1788118660377-nx7o02tby","service":"solynk-api","timestamp":"2026-08-30 20:37:40","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.135.0 Chrome/148.0.7778.280 Electron/42.8.1 Safari/537.36"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"GET /health","requestId":"1788126419735-zz79gbj6d","service":"solynk-api","timestamp":"2026-08-30 22:46:59"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"GET /api/v1","requestId":"1788126419905-wutkp2a68","service":"solynk-api","timestamp":"2026-08-30 22:46:59"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"POST /api/v1/auth/register","requestId":"1788126420592-tm3vwwoao","service":"solynk-api","timestamp":"2026-08-30 22:47:00"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"POST /api/v1/calculate","requestId":"1788126420637-akan6cvkv","service":"solynk-api","timestamp":"2026-08-30 22:47:00"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"POST /api/v1/ai/chat","requestId":"1788126420676-ln3cf7nns","service":"solynk-api","timestamp":"2026-08-30 22:47:00"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"GET /api/v1/unknown-route","requestId":"1788126422439-2r2tx21pe","service":"solynk-api","timestamp":"2026-08-30 22:47:02"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"GET /health","requestId":"1788126677516-un22jqwpj","service":"solynk-api","timestamp":"2026-08-30 22:51:17"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"GET /api/v1","requestId":"1788126677611-xp51c744d","service":"solynk-api","timestamp":"2026-08-30 22:51:17"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"POST /api/v1/auth/register","requestId":"1788126677721-n4h1yq9xb","service":"solynk-api","timestamp":"2026-08-30 22:51:17"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"POST /api/v1/calculate","requestId":"1788126677767-mnqt6ibku","service":"solynk-api","timestamp":"2026-08-30 22:51:17"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"POST /api/v1/ai/chat","requestId":"1788126677800-qn66zqswi","service":"solynk-api","timestamp":"2026-08-30 22:51:17"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"GET /api/v1/unknown-route","requestId":"1788126679278-18h85lmc1","service":"solynk-api","timestamp":"2026-08-30 22:51:19"}

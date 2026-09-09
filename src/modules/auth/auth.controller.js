@@ -253,10 +253,13 @@ class AuthController {
     try {
       const { email } = req.body;
 
+      const passwordResetRedirectUrl = process.env.PASSWORD_RESET_REDIRECT_URL
+        || `${(process.env.PUBLIC_APP_URL || process.env.APP_URL || process.env.CORS_ORIGIN || 'http://localhost:3000').replace(/\/+$/, '')}/reset-password`;
+
       const { data, error } = await supabase.auth.admin.generateLink({
         type: 'recovery',
         email,
-        options: { redirectTo: process.env.PASSWORD_RESET_REDIRECT_URL }
+        options: { redirectTo: passwordResetRedirectUrl }
       });
       if (error) throw error;
 

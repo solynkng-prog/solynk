@@ -25,10 +25,16 @@
             if (!config.supabaseUrl || !config.supabaseAnonKey) {
                 throw new Error('Supabase configuration is incomplete');
             }
+            window.__SOLYNK_CONFIG__ = {
+                appUrl: (config.appUrl || window.location.origin).replace(/\/+$/, ''),
+                supabaseUrl: config.supabaseUrl,
+                supabaseAnonKey: config.supabaseAnonKey,
+            };
             window.supabaseClient = createClient(config.supabaseUrl, config.supabaseAnonKey);
             window.supabaseReady = true;
             window.dispatchEvent(new Event('supabase-ready'));
         } catch (error) {
+            window.__SOLYNK_CONFIG__ = window.__SOLYNK_CONFIG__ || { appUrl: window.location.origin };
             window.supabaseInitError = error;
             window.dispatchEvent(new Event('supabase-init-error'));
             console.error('Supabase initialization failed:', error);
@@ -1714,16 +1720,71 @@
         @media(max-width:1024px){
             .market-stats { grid-template-columns:repeat(2, 1fr); }
             .plan-grid { grid-template-columns:1fr; }
+            .dash-grid { grid-template-columns:1fr; }
+            .calc-grid { grid-template-columns:1fr; }
+            .results-grid { grid-template-columns:1fr; }
+            .savings-projection { grid-template-columns:repeat(2, minmax(0, 1fr)); }
         }
         @media(max-width:768px){
-            .marketplace { padding:20px; }
+            body { font-size:15px; }
+            .nav { padding:0 18px; min-height:82px; gap:10px; flex-wrap:wrap; }
+            .nav-brand { font-size:1.45rem; }
+            .nav-links { display:none; }
+            .nav-auth { gap:8px; }
+            .nav-auth .btn, .btn { min-height:46px; }
+            .hero { padding:0 16px; }
+            .hero-inner { padding:74px 0 54px; }
+            .hero-tag { font-size:0.78rem; padding:8px 16px; }
+            .hero h1 { font-size:clamp(2.6rem, 13vw, 4.2rem); line-height:0.9; }
+            .hero p { font-size:1rem; max-width:100%; }
+            .hero-actions { flex-direction:column; align-items:stretch; }
+            .hero-stats { flex-wrap:wrap; gap:18px; justify-content:space-between; }
+            .hero-stat { flex:1 1 42%; }
+            .section, .pricing, .dash, .calc, .results-view, .marketplace, .faq-section { padding-left:18px; padding-right:18px; }
+            .feat-grid, .price-grid, .q-actions, .dash-grid, .calc-grid, .results-grid, .stat-row, .plan-grid, .market-stats { grid-template-columns:1fr; }
+            .feat-card, .price-card, .stat-box, .calc-box, .result-card, .action-card, .panel, .sub-card, .installer-card { padding:20px; }
             .market-head { flex-direction:column; align-items:flex-start; }
             .market-filters { width:100%; }
             .filter-group { width:100%; }
             .filter-group input { width:100%; }
-            .market-stats { grid-template-columns:repeat(2, 1fr); }
             .installer-grid { grid-template-columns:1fr; }
             .profile-stats { grid-template-columns:1fr; }
+            .savings-projection { grid-template-columns:1fr; }
+            .modal-box { padding:26px 22px; }
+            .auth-modal-box { max-width:min(92vw, 480px); }
+            .auth-brand, .auth-hero, .auth-form { padding-left:22px; padding-right:22px; }
+            .auth-form h2 { font-size:1.6rem; }
+            .auth-form .btn { width:100%; }
+            .type-select { grid-template-columns:1fr; }
+        }
+        @media(max-width:520px){
+            .nav { padding:0 12px; }
+            .nav-brand { font-size:1.2rem; }
+            .nav-auth { width:100%; justify-content:space-between; }
+            .nav-auth .btn { flex:1 1 auto; }
+            .hero-inner { padding-top:52px; }
+            .hero-tag { max-width:100%; justify-content:center; }
+            .hero h1 { font-size:clamp(2.45rem, 16vw, 3.8rem); }
+            .hero p { font-size:0.98rem; }
+            .hero-stats { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); }
+            .hero-stat { flex:none; }
+            .section, .pricing, .dash, .calc, .results-view, .marketplace, .faq-section { padding-left:14px; padding-right:14px; }
+            .result-row { flex-direction:column; align-items:flex-start; gap:6px; }
+            .result-row .value { font-size:0.95rem; }
+            .cost-row { font-size:0.8rem; }
+            .auth-brand, .auth-hero, .auth-form { padding-left:18px; padding-right:18px; }
+            .auth-form .field input { min-height:44px; }
+            .auth-modal-box.register-mode .auth-brand,
+            .auth-modal-box.register-mode .auth-form { padding-left:18px; padding-right:18px; }
+            .auth-modal-box.register-mode .auth-form h2 { font-size:1.3rem; }
+            .auth-modal-box.register-mode .auth-form > p { margin-bottom:8px; font-size:0.72rem; }
+            .auth-modal-box.register-mode .type-opt { padding:8px 6px; }
+            .auth-modal-box.register-mode .auth-form .field { margin-bottom:7px; }
+            .auth-modal-box.register-mode .auth-form .field input { min-height:36px; }
+            .auth-modal-box.register-mode .auth-form .btn { min-height:36px; }
+            .auth-modal-box.register-mode .auth-divider { margin:8px 0; }
+            .auth-modal-box.register-mode .form-foot { margin-top:8px; font-size:0.75rem; }
+            .auth-modal-box.register-mode .auth-trust { margin-top:7px; }
         }
 
         /* ===== ADMIN PANEL ===== */
@@ -3154,6 +3215,13 @@
             });
         }
 
+        function getPublicAppUrl() {
+            const configuredUrl = window.__SOLYNK_CONFIG__?.appUrl;
+            if (configuredUrl) return configuredUrl.replace(/\/+$/, '');
+            const currentOrigin = window.location.origin.replace(/\/+$/, '');
+            return currentOrigin;
+        }
+
         function getAuthErrorMessage(error, fallback) {
             const message = error?.message || '';
             if (/rate limit|too many requests|email rate limit/i.test(message)) {
@@ -3307,9 +3375,10 @@
         async function handleGoogleSignIn() {
             try {
                 const supabaseClient = await getSupabaseClient();
+                const publicAppUrl = getPublicAppUrl();
                 const { error } = await supabaseClient.auth.signInWithOAuth({
                     provider: 'google',
-                    options: { redirectTo: window.location.origin }
+                    options: { redirectTo: publicAppUrl }
                 });
                 if (error) throw error;
             } catch (err) {
@@ -3329,8 +3398,9 @@
 
             try {
                 const supabaseClient = await getSupabaseClient();
+                const publicAppUrl = getPublicAppUrl();
                 const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-                    redirectTo: window.location.origin + '/reset-password'
+                    redirectTo: `${publicAppUrl}/reset-password`
                 });
                 if (error) throw error;
                 sessionStorage.setItem(resetKey, String(Date.now()));
