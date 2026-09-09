@@ -1983,13 +1983,13 @@
             SOLYNK
         </div>
         <div class="nav-links">
-            <a href="#" class="active" onclick="showView('landing')">Home</a>
-            <a href="#" onclick="scrollToFeatures()">Features</a>
-            <a href="#" onclick="scrollToPricing()">Pricing</a>
-            <a href="#" onclick="showView('calculator')">Calculator</a>
-            <a href="#" onclick="showResults()">Results</a>
-            <a href="#" onclick="showView('marketplace')">Marketplace</a>
-            <a href="#" onclick="showBilling()">Billing</a>
+            <a href="#" class="active" onclick="event.preventDefault(); showView('landing')">Home</a>
+            <a href="#" onclick="event.preventDefault(); scrollToFeatures()">Features</a>
+            <a href="#" onclick="event.preventDefault(); scrollToPricing()">Pricing</a>
+            <a href="#" onclick="event.preventDefault(); showView('calculator')">Calculator</a>
+            <a href="#" onclick="event.preventDefault(); showResults()">Results</a>
+            <a href="#" onclick="event.preventDefault(); showView('marketplace')">Marketplace</a>
+            <a href="#" onclick="event.preventDefault(); showBilling()">Billing</a>
         </div>
         <div class="nav-auth" id="navAuth">
             <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Switch to light mode" title="Switch to light mode"><i class="fas fa-sun"></i></button>
@@ -2146,12 +2146,12 @@
                         <button class="btn btn-primary btn-sm" onclick="askAIFAQ()"><i class="fas fa-robot"></i> Ask AI</button>
                     </div>
                     <div class="search-tags">
-                        <span class="tag active" onclick="filterFAQ('all')">All</span>
-                        <span class="tag" onclick="filterFAQ('basics')">Basics</span>
-                        <span class="tag" onclick="filterFAQ('installation')">Installation</span>
-                        <span class="tag" onclick="filterFAQ('costs')">Costs & Savings</span>
-                        <span class="tag" onclick="filterFAQ('equipment')">Equipment</span>
-                        <span class="tag" onclick="filterFAQ('maintenance')">Maintenance</span>
+                        <span class="tag active" onclick="filterFAQ('all', event)">All</span>
+                        <span class="tag" onclick="filterFAQ('basics', event)">Basics</span>
+                        <span class="tag" onclick="filterFAQ('installation', event)">Installation</span>
+                        <span class="tag" onclick="filterFAQ('costs', event)">Costs & Savings</span>
+                        <span class="tag" onclick="filterFAQ('equipment', event)">Equipment</span>
+                        <span class="tag" onclick="filterFAQ('maintenance', event)">Maintenance</span>
                     </div>
                 </div>
 
@@ -2802,8 +2802,8 @@
             <div id="loginForm" class="auth-form">
                 <h2>Welcome Back</h2>
                 <p>Sign in to access your solar workspace, saved calculations, and installer marketplace.</p>
-                <div class="field"><label>Email Address</label><i class="fas fa-envelope auth-field-icon"></i><input type="email" placeholder="you@example.com" id="loginEmail"></div>
-                <div class="field"><label>Password</label><i class="fas fa-lock auth-field-icon"></i><input type="password" placeholder="Enter your password" id="loginPassword"></div>
+                <div class="field"><label for="loginEmail">Email Address</label><i class="fas fa-envelope auth-field-icon" aria-hidden="true"></i><input type="email" placeholder="you@example.com" id="loginEmail"></div>
+                <div class="field"><label for="loginPassword">Password</label><i class="fas fa-lock auth-field-icon" aria-hidden="true"></i><input type="password" placeholder="Enter your password" id="loginPassword"></div>
                 <span class="forgot-link" onclick="handlePasswordReset()">Forgot password?</span>
                 <button class="btn btn-primary conversion-btn" style="width:100%; margin-top:6px;" onclick="handleLogin()"><i class="fas fa-sign-in-alt"></i> Sign In</button>
 
@@ -2820,9 +2820,9 @@
                     <div class="type-opt active" onclick="selectUserType(this,'homeowner')"><i class="fas fa-home"></i><span>Homeowner</span></div>
                     <div class="type-opt" onclick="selectUserType(this,'installer')"><i class="fas fa-store"></i><span>Seller / Installer</span></div>
                 </div>
-                <div class="field"><label>Full Name</label><i class="fas fa-user auth-field-icon"></i><input type="text" placeholder="John Doe" id="regName"></div>
-                <div class="field"><label>Email Address</label><i class="fas fa-envelope auth-field-icon"></i><input type="email" placeholder="you@example.com" id="regEmail"></div>
-                <div class="field"><label>Password</label><i class="fas fa-lock auth-field-icon"></i><input type="password" placeholder="Min 8 characters" id="regPassword"></div>
+                <div class="field"><label for="regName">Full Name</label><i class="fas fa-user auth-field-icon" aria-hidden="true"></i><input type="text" placeholder="John Doe" id="regName"></div>
+                <div class="field"><label for="regEmail">Email Address</label><i class="fas fa-envelope auth-field-icon" aria-hidden="true"></i><input type="email" placeholder="you@example.com" id="regEmail"></div>
+                <div class="field"><label for="regPassword">Password</label><i class="fas fa-lock auth-field-icon" aria-hidden="true"></i><input type="password" placeholder="Min 8 characters" id="regPassword"></div>
                 <button class="btn btn-primary conversion-btn" style="width:100%; margin-top:6px;" onclick="handleRegister()"><i class="fas fa-user-plus"></i> Create Account</button>
 
                 <div class="auth-divider">or</div>
@@ -2853,12 +2853,12 @@
                         <button class="btn btn-primary btn-sm" onclick="askAIFAQ()"><i class="fas fa-robot"></i> Ask AI</button>
                     </div>
                     <div class="search-tags">
-                        <span class="tag active" onclick="filterFAQView('all')">All</span>
-                        <span class="tag" onclick="filterFAQView('basics')">Basics</span>
-                        <span class="tag" onclick="filterFAQView('installation')">Installation</span>
-                        <span class="tag" onclick="filterFAQView('costs')">Costs & Savings</span>
-                        <span class="tag" onclick="filterFAQView('equipment')">Equipment</span>
-                        <span class="tag" onclick="filterFAQView('maintenance')">Maintenance</span>
+                        <span class="tag active" onclick="filterFAQView('all', event)">All</span>
+                        <span class="tag" onclick="filterFAQView('basics', event)">Basics</span>
+                        <span class="tag" onclick="filterFAQView('installation', event)">Installation</span>
+                        <span class="tag" onclick="filterFAQView('costs', event)">Costs & Savings</span>
+                        <span class="tag" onclick="filterFAQView('equipment', event)">Equipment</span>
+                        <span class="tag" onclick="filterFAQView('maintenance', event)">Maintenance</span>
                     </div>
                 </div>
                 <div class="faq-grid" id="faqGridView"></div>
@@ -3708,7 +3708,12 @@
             if (!wrap) return;
             const el = document.createElement('div'); el.className = 'toast ' + type;
             const icons = { ok: 'fa-check-circle', err: 'fa-exclamation-circle', info: 'fa-info-circle' };
-            el.innerHTML = '<i class="fas ' + icons[type] + '"></i><span>' + message + '</span>';
+            const icon = document.createElement('i');
+            icon.className = 'fas ' + (icons[type] || icons.info);
+            icon.setAttribute('aria-hidden', 'true');
+            const text = document.createElement('span');
+            text.textContent = message;
+            el.append(icon, text);
             wrap.appendChild(el);
             setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateX(120%)'; setTimeout(() => el.remove(), 300); }, 5000);
         }
@@ -3927,9 +3932,9 @@
                 noResults.style.display = 'none';
             }
         }
-        function filterFAQ(category) {
-            document.querySelectorAll('#faqGrid').forEach ? document.querySelectorAll('#faqGrid .search-tags .tag').forEach(t => t.classList.remove('active')) : null;
-            if (event && event.target) event.target.classList.add('active');
+        function filterFAQ(category, event) {
+            document.querySelectorAll('.faq-container .search-tags .tag').forEach(t => t.classList.remove('active'));
+            if (event?.target) event.target.classList.add('active');
             const grid = document.getElementById('faqGrid');
             if (!grid) return;
             const categories = grid.querySelectorAll('.faq-category');
@@ -3938,8 +3943,8 @@
                 else cat.style.display = 'none';
             });
         }
-        function filterFAQView(category) {
-            if (event && event.target) {
+        function filterFAQView(category, event) {
+            if (event?.target) {
                 document.querySelectorAll('#view-faq .search-tags .tag').forEach(t => t.classList.remove('active'));
                 event.target.classList.add('active');
             }
@@ -3952,14 +3957,19 @@
             });
         }
         function askAIFAQ() {
-            const searchInput = document.getElementById('faqSearch') || document.getElementById('faqSearchView');
-            const question = searchInput ? searchInput.value : '';
+            const searchInputs = [document.getElementById('faqSearch'), document.getElementById('faqSearchView')];
+            const searchInput = searchInputs.find(input => input && input.offsetParent !== null) || searchInputs.find(Boolean);
+            const question = searchInput ? searchInput.value.trim() : '';
             toggleAI();
             if (question) {
                 setTimeout(() => {
                     const aiBody = document.getElementById('aiBody');
                     if (aiBody) {
-                        aiBody.innerHTML += '<div class="msg user"><div class="bubble">' + question + '</div></div>';
+                        const bubble = document.createElement('div');
+                        bubble.className = 'msg user';
+                        bubble.innerHTML = '<div class="bubble"></div>';
+                        bubble.querySelector('.bubble').textContent = question;
+                        aiBody.appendChild(bubble);
                         aiBody.scrollTop = aiBody.scrollHeight;
                         setTimeout(() => {
                             const responses = [
@@ -5079,25 +5089,25 @@ Enter new plan (free/premium/installer):`, user.plan);
                     <span>Admin</span>
                 </div>
                 <div class="admin-nav">
-                    <a href="#" class="active" onclick="showAdminTab('overview')">
+                    <a href="#" class="active" onclick="event.preventDefault(); showAdminTab('overview')">
                         <i class="fas fa-chart-line"></i> Overview
                     </a>
-                    <a href="#" onclick="showAdminTab('users')">
+                    <a href="#" onclick="event.preventDefault(); showAdminTab('users')">
                         <i class="fas fa-users"></i> Users
                         <span class="admin-badge" id="adminUserCount">0</span>
                     </a>
-                    <a href="#" onclick="showAdminTab('installers')">
+                    <a href="#" onclick="event.preventDefault(); showAdminTab('installers')">
                         <i class="fas fa-hard-hat"></i> Installers
                         <span class="admin-badge" id="adminInstallerCount">0</span>
                     </a>
-                    <a href="#" onclick="showAdminTab('reports')">
+                    <a href="#" onclick="event.preventDefault(); showAdminTab('reports')">
                         <i class="fas fa-file-alt"></i> Reports
                         <span class="admin-badge" id="adminReportCount">0</span>
                     </a>
-                    <a href="#" onclick="showAdminTab('analytics')">
+                    <a href="#" onclick="event.preventDefault(); showAdminTab('analytics')">
                         <i class="fas fa-chart-pie"></i> Analytics
                     </a>
-                    <a href="#" onclick="showAdminTab('settings')">
+                    <a href="#" onclick="event.preventDefault(); showAdminTab('settings')">
                         <i class="fas fa-cog"></i> Settings
                     </a>
                 </div>
