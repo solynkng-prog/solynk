@@ -120,7 +120,8 @@ app.get('/api/config', (req, res) => {
   res.json({
     supabaseUrl: process.env.SUPABASE_URL,
     supabaseAnonKey: process.env.SUPABASE_ANON_KEY,
-    apiBaseUrl: getApiBaseUrl(req)
+    apiBaseUrl: getApiBaseUrl(req),
+    appUrl: process.env.PUBLIC_APP_URL || getRequestOrigin(req)
   });
 });
 
