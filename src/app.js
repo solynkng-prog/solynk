@@ -24,6 +24,8 @@ const postsRoutes = require('./modules/posts/posts.routes');
 const productsRoutes = require('./modules/products/products.routes');
 
 const app = express();
+// Render terminates TLS at its proxy; trust it so generated browser URLs stay HTTPS.
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 const API_VERSION = process.env.API_VERSION || 'v1';
 const PUBLIC_API_URL = (process.env.PUBLIC_API_URL || '').replace(/\/+$/, '');
