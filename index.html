@@ -170,6 +170,15 @@
         .nav-links a:hover { color:var(--text); background:var(--surface-hover); }
         .nav-links a.active { color:var(--primary-bright); background:var(--primary-dim); }
         .nav-auth { display:flex; gap:10px; align-items:center; }
+        .nav-menu-toggle {
+            display:none; width:42px; height:42px; align-items:center; justify-content:center;
+            border:1px solid var(--border-hover); border-radius:10px;
+            background:var(--surface); color:var(--text); cursor:pointer;
+        }
+        .nav-menu-toggle:hover, .nav-menu-toggle[aria-expanded="true"] {
+            background:var(--primary-dim); border-color:var(--primary); color:var(--primary-bright);
+        }
+        .mobile-nav-panel { display:none; }
         .theme-toggle {
             width:40px; height:40px; display:grid; place-items:center;
             border:1px solid var(--border-hover); border-radius:10px;
@@ -639,6 +648,35 @@
             .auth-modal-box.register-mode .auth-divider { margin:8px 0; }
             .auth-modal-box.register-mode .form-foot { margin-top:8px; font-size:0.75rem; }
             .auth-modal-box.register-mode .auth-trust { margin-top:7px; }
+        }
+        @media(max-width:768px) {
+            .nav { height:64px; padding:0 16px; }
+            .nav-brand { gap:8px; font-size:1.08rem; }
+            .nav-brand .logo { width:36px; height:36px; border-radius:9px; }
+            .nav-links { display:none; }
+            .nav-menu-toggle { display:inline-flex; margin-left:auto; margin-right:8px; }
+            .nav-auth { gap:6px; }
+            .nav-auth > .btn { display:none; }
+            .nav-auth .theme-toggle { width:38px; height:38px; }
+            .mobile-nav-panel {
+                position:absolute; top:calc(100% + 8px); left:12px; right:12px;
+                display:flex; flex-direction:column; gap:4px; padding:10px;
+                background:var(--bg-raised); border:1px solid var(--border-hover);
+                border-radius:14px; box-shadow:var(--shadow-lg);
+                opacity:0; visibility:hidden; transform:translateY(-8px);
+                transition:opacity .2s ease, transform .2s ease, visibility .2s ease;
+            }
+            .mobile-nav-panel.open { opacity:1; visibility:visible; transform:translateY(0); }
+            .mobile-nav-panel a {
+                display:flex; align-items:center; gap:12px; min-height:46px;
+                padding:10px 12px; border-radius:9px; color:var(--text-secondary);
+                text-decoration:none; font-size:.9rem; font-weight:600;
+            }
+            .mobile-nav-panel a:hover, .mobile-nav-panel a:focus-visible {
+                color:var(--text); background:var(--surface-hover); outline:none;
+            }
+            .mobile-nav-panel a i { width:18px; color:var(--primary-bright); text-align:center; }
+            #navUser .nav-menu-toggle, #navAdmin .nav-menu-toggle { display:none; }
         }
         .modal-close {
             position:absolute; top:18px; right:18px;
@@ -1991,6 +2029,18 @@
             <a href="#" onclick="event.preventDefault(); showView('marketplace')">Marketplace</a>
             <a href="#" onclick="event.preventDefault(); showBilling()">Billing</a>
         </div>
+        <button class="nav-menu-toggle" id="mobileNavToggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileNavPanel" onclick="toggleMobileNav()">
+            <i class="fas fa-bars" aria-hidden="true"></i>
+        </button>
+        <div class="mobile-nav-panel" id="mobileNavPanel">
+            <a href="#" onclick="event.preventDefault(); closeMobileNav(); showView('landing')"><i class="fas fa-house"></i>Home</a>
+            <a href="#" onclick="event.preventDefault(); closeMobileNav(); scrollToFeatures()"><i class="fas fa-sparkles"></i>Features</a>
+            <a href="#" onclick="event.preventDefault(); closeMobileNav(); scrollToPricing()"><i class="fas fa-tags"></i>Pricing</a>
+            <a href="#" onclick="event.preventDefault(); closeMobileNav(); showView('calculator')"><i class="fas fa-calculator"></i>Calculator</a>
+            <a href="#" onclick="event.preventDefault(); closeMobileNav(); showResults()"><i class="fas fa-chart-line"></i>Results</a>
+            <a href="#" onclick="event.preventDefault(); closeMobileNav(); showView('marketplace')"><i class="fas fa-store"></i>Marketplace</a>
+            <a href="#" onclick="event.preventDefault(); closeMobileNav(); showBilling()"><i class="fas fa-credit-card"></i>Billing</a>
+        </div>
         <div class="nav-auth" id="navAuth">
             <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Switch to light mode" title="Switch to light mode"><i class="fas fa-sun"></i></button>
             <button class="btn btn-ghost" onclick="openAuth('login')">Log In</button>
@@ -3242,6 +3292,22 @@
         }
         function scrollToFeatures() { showView('landing'); setTimeout(() => document.getElementById('features').scrollIntoView({ behavior: 'smooth' }), 100); }
         function scrollToPricing() { showView('landing'); setTimeout(() => document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' }), 100); }
+        function toggleMobileNav() {
+            const panel = document.getElementById('mobileNavPanel');
+            const toggle = document.getElementById('mobileNavToggle');
+            const isOpen = panel?.classList.toggle('open') || false;
+            toggle?.setAttribute('aria-expanded', String(isOpen));
+            toggle?.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+            if (toggle) toggle.innerHTML = `<i class="fas fa-${isOpen ? 'times' : 'bars'}" aria-hidden="true"></i>`;
+        }
+        function closeMobileNav() {
+            const panel = document.getElementById('mobileNavPanel');
+            const toggle = document.getElementById('mobileNavToggle');
+            panel?.classList.remove('open');
+            toggle?.setAttribute('aria-expanded', 'false');
+            toggle?.setAttribute('aria-label', 'Open navigation menu');
+            if (toggle) toggle.innerHTML = '<i class="fas fa-bars" aria-hidden="true"></i>';
+        }
 
         // ===== AUTH MODAL =====
         function openAuth(type) { document.getElementById('authModal').classList.add('active'); switchAuth(type); }
